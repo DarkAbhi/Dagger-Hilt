@@ -2,8 +2,12 @@ package com.darkabhi.hilt
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -16,23 +20,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         println(someClass.doAThing())
-        println(someClass.doSomeOtherThing())
     }
 }
 
+@AndroidEntryPoint
+class MyFragment:Fragment() {
+    @Inject
+    lateinit var someClass: SomeClass
+}
 
-class SomeClass @Inject constructor(private val someOtherClass: SomeOtherClass) {
+@ActivityScoped
+class SomeClass @Inject constructor() {
     fun doAThing(): String {
         return "I DID IT!"
-    }
-
-    fun doSomeOtherThing(): String {
-        return someOtherClass.doSomeOtherThing()
-    }
-}
-
-class SomeOtherClass @Inject constructor() {
-    fun doSomeOtherThing(): String {
-        return "I DID THE OTHER THING!"
     }
 }
